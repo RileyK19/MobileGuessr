@@ -11,7 +11,7 @@ Mobile alternative to GeoGuessr
 
 - Includes timer, high score, images from around the world, and more
 
-- Used Apple MapKit and Google Static StreetView, created with SwiftUI
+- Powered by Apple MapKit and Google Static StreetView, created with SwiftUI
 
 ## Backend Documentation
 
@@ -58,11 +58,38 @@ degToKm(coordinates: Coordinate)
 Riley Koo
 
 riley.koo@vanderbilt.edu
-- ios app, so run through xcode
+- Run / simulate iOS app with Xcode
 - I wanted to write an ios app because I have some experience in ios and 
   I found that that would fit the challenge better then a website. The 
   person who needs a game on the train would find it more convenient
-  than a website. I also made a quick 10-15 minute geoguessr-like
-  game for him to play. The backend is in the swift file called 'File'
-  and the frontend is in the 'ContentView'. 
+  than a website. So I made a quick 10-15 minute geoguessr-like
+  game for him to play.
+- The backend is in the swift file called 'File'
+  and the frontend is in the 'ContentView'.
+
+### License
+
+```
+MIT License
+
+Copyright (c) 2024 R. Koo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 

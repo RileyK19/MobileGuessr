@@ -2,16 +2,21 @@
 Change++ Challenge Solution
 
 ## Showcase
-<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Image_1.png" alt="Image 1" width="200"/> <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Image_2.png" alt="Image 2" width="200"/> 
-<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Image_3.png" alt="Image 3" width="200"/>
+<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Main_Menu.png" alt="Image 1" width="200"/> <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Guess_Screen.png" alt="Image 2" width="200"/> 
+<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Map.png" alt="Image 3" width="200"/>
 
 Mobile alternative to GeoGuessr 
 
 - Quick 15 minute games
 
-- Includes timer, high score, images from around the world, and more
+- Includes timer, high score, images from around the world, dark mode support, and more
 
 - Powered by Apple MapKit and Google Static StreetView, created with SwiftUI
+
+## Dark Mode Support
+
+<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Dark_Main_Menu.png" alt="Image 1" width="200"/> <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Dark_Guess_Screen.png" alt="Image 2" width="200"/> 
+<img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Dark_Map.png" alt="Image 3" width="200"/>
 
 ## Backend Documentation
 
@@ -34,7 +39,10 @@ question.generate()
 question.getRandom()
 
 // Calculates distance between user's answer and correct answer
-question.dist()
+question.calcDist()
+
+// Sets the user answer to the given Coordinate
+question.setUserAnswer(coordinates: Coordinate)
 ```
 
 Other functions:
@@ -50,6 +58,9 @@ urlToStr(url: URL)
 
 // Translates degrees of latitude, longitude coordinates into kilometers
 degToKm(coordinates: Coordinate)
+
+// Calculates the score from a given distance in kilometers
+calcScore(distance: Double)
 ```
 
 
@@ -58,14 +69,9 @@ degToKm(coordinates: Coordinate)
 Riley Koo
 
 riley.koo@vanderbilt.edu
-- Run / simulate iOS app with Xcode
-- I wanted to write an ios app because I have some experience in ios and 
-  I found that that would fit the challenge better then a website. The 
-  person who needs a game on the train would find it more convenient
-  than a website. So I made a quick 10-15 minute geoguessr-like
-  game for him to play.
-- The backend is in the swift file called 'File'
-  and the frontend is in the 'ContentView'.
+- Run / simulate iOS app with Xcode. Tested and built with iPhone 15 Pro simulator
+- I wanted to write an ios app because I have some experience in ios and I found that that would fit the challenge better then a website. The person who needs a game on the train would find it more convenient than a website. So I made a quick 10-15 minute geoguessr-like game for him to play.
+- The backend is in the swift file called 'File' and the frontend is in the 'ContentView'.
 
 ### License
 

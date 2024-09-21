@@ -9,8 +9,6 @@ import SwiftUI
 import CoreLocation
 import MapKit
 
-let timeLimit = 180
-
 struct ContentView: View {
     @SceneStorage("HighScore") var highScore: Double = 0
     
@@ -28,29 +26,39 @@ struct ContentView: View {
     @State private var question = Question()
     @State private var displayMap: Bool = false
     @State private var reset: Bool = true
-    @State private var dist: Double = 0
     @State private var score: Double = 0
     @State private var lastScore: Double = 0
     @State private var questionNum: Int = 7
     
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var startQuestion: Bool = false
+    
+    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State private var timeRemaining = timeLimit
-    @State var startToggle = false
+    @State private var startToggle = false
+    
+    @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        if dist == -1 {
+        if startQuestion {
             VStack {
-                Text("WHERE IS THIS??")
-                    .font(.title)
+                ZStack {
+                    Rectangle()
+                        .frame(width: 5000, height: 100)
+                        .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.35) : Color.black.opacity(0.35))
+                    Text("WHERE IS THIS??")
+                        .foregroundStyle(.white)
+                        .font(.title)
+                        .bold()
+                }
                 Spacer()
-                    .frame(height: 60)
+                    .frame(height: 45)
                 HStack {
                     Spacer()
                         .frame(width: 10)
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 200, height: 70)
-                            .foregroundStyle(Color.black.opacity(0.7))
+                            .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.35) : Color.black.opacity(0.35))
                         VStack {
                             Text("Current Score: \(score, specifier:  "%.2f")")
                                 .foregroundStyle(.white)
@@ -65,7 +73,7 @@ struct ContentView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
                                 .frame(width: 150, height: 45)
-                                .foregroundStyle(Color.black.opacity(0.7))
+                                .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.35) : Color.black.opacity(0.35))
                             Text("Time: \(timeRemaining) s")
                                 .foregroundStyle(.white)
                                 .frame(width: 100)
@@ -83,7 +91,8 @@ struct ContentView: View {
                                         timeRemaining = timeLimit
                                         
                                         questionNum += 1
-                                        dist = 50000
+                                        question.dist = 50000
+                                        startQuestion = false
                                         startToggle.toggle()
                                     }
                                 }
@@ -91,7 +100,7 @@ struct ContentView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 15)
                                 .frame(width: 150, height: 45)
-                                .foregroundStyle(Color.black.opacity(0.7))
+                                .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.35) : Color.black.opacity(0.35))
                             Text("Question: \(questionNum+1) / 5")
                                 .foregroundStyle(.white)
                         }
@@ -108,10 +117,11 @@ struct ContentView: View {
                     displayMap = true
                 } label: {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .frame(width: 150, height: 35)
-                            .foregroundStyle(Color.black.opacity(0.7))
+                        RoundedRectangle(cornerRadius: 30)
+                            .frame(width: 175, height: 65)
+                            .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.7) : Color.black.opacity(0.7))
                         Text("Display Map")
+                            .font(.title3)
                             .foregroundStyle(.white)
                     }
                 }
@@ -147,21 +157,21 @@ struct ContentView: View {
                             HStack {
                                 Spacer()
                                 Button(action: {
-                                    //locations.append(Mark(coordinate: region.center))
-                                    question.userAnswer = Coordinate(longitude: region.center.longitude, latitude: region.center.latitude)
+                                    question.setUserAnswer(c: Coordinate(longitude: region.center.longitude, latitude: region.center.latitude))
+                                    lastScore = question.score
+                                    score += question.score
                                     displayMap = false
-                                    dist = question.dist()
-                                    lastScore = calcScore(dist)
-                                    score += lastScore
                                     questionNum += 1
                                     reset = true
+                                    
+                                    startQuestion = false
                                     
                                     startToggle.toggle()
                                 }) {
                                     Image(systemName: "plus")
                                 }
                                 .padding()
-                                .background(Color.black.opacity(0.7))
+                                .background((colorScheme == . dark) ?  Color.white.opacity(0.7) : Color.black.opacity(0.7))
                                 .foregroundColor(.white)
                                 .font(.title)
                                 .clipShape(Circle())
@@ -182,7 +192,7 @@ struct ContentView: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 15)
                                         .frame(width: 75, height: 35)
-                                        .foregroundStyle(Color.black.opacity(0.7))
+                                        .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.7) : Color.black.opacity(0.7))
                                     Text("Close")
                                         .bold()
                                         .foregroundStyle(.white)
@@ -197,7 +207,7 @@ struct ContentView: View {
         } else if questionNum <= 6 {
             VStack (spacing: 10) {
                 Text("Score: \(score-lastScore, specifier: "%.2f") + \(lastScore, specifier: "%.2f")")
-                Text("Distance: \(dist, specifier: "%.2f") km")
+                Text("Distance: \(question.dist, specifier: "%.2f") km")
                 Text("Answer: \(question.ansLoc)")
                 Text("Question: \(questionNum) / 5")
                 Button {
@@ -208,7 +218,7 @@ struct ContentView: View {
                             highScore = highScore < score ? score : highScore
                         }
                         else {
-                            dist = -1
+                            startQuestion = true
                             
                             startToggle.toggle()
                             timeRemaining = timeLimit
@@ -218,7 +228,7 @@ struct ContentView: View {
                     ZStack {
                         RoundedRectangle(cornerRadius: 15)
                             .frame(width: 75, height: 35)
-                            .foregroundStyle(Color.black.opacity(0.7))
+                            .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.7) : Color.black.opacity(0.7))
                         Text("Next")
                             .foregroundStyle(.white)
                     }
@@ -229,6 +239,9 @@ struct ContentView: View {
                 Spacer()
                     .frame(height: 100)
                 ZStack {
+                    Rectangle()
+                        .frame(width: 5000, height: 100)
+                        .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.5) : Color.black.opacity(0.5))
                     HStack {
                         Spacer()
                             .frame(width: 200)
@@ -240,6 +253,7 @@ struct ContentView: View {
                             .opacity(0.75)
                     }
                     Text("MobileGuessr")
+                        .foregroundStyle(.white)
                         .font(.title)
                         .bold()
                 }
@@ -272,16 +286,24 @@ struct ContentView: View {
                     question = Question()
                     displayMap = false
                     reset = true
-                    dist = -1
                     score = 0
                     lastScore = 0
                     questionNum = 0
                     
+                    startQuestion = true
+                    
                     startToggle.toggle()
                     timeRemaining = timeLimit
                 } label: {
-                    Text("Start")
-                        .bold()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 15)
+                            .frame(width: 150, height: 50)
+                            .foregroundStyle((colorScheme == . dark) ?  Color.white.opacity(0.7) : Color.black.opacity(0.7))
+                        Text("Start")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                            .bold()
+                    }
                 }
                 Spacer()
                     .frame(height: 50)
@@ -300,7 +322,4 @@ struct Mark: Identifiable {
     let id = UUID()
     let coordinate: CLLocationCoordinate2D
     var show = false
-}
-func calcScore(_ x: Double) -> Double {
-    return 5000 * exp(-x/2000)
 }

@@ -6,6 +6,7 @@
 //
 
 let radius = 99999999
+let timeLimit = 180
 
 import Foundation
 import MapKit
@@ -22,10 +23,14 @@ class Question
     var userAnswer: Coordinate?
     var url: URL?
     var ansLoc: String
+    var dist: Double
+    var score: Double
     init() {
+        dist = -1
+        score = -1
         ansLoc = ""
         rightAnswer = Coordinate(longitude: 0, latitude: 0)
-        var tmp = parseUrl(url: URL(string: "https://api.3geonames.org/?randomland=yes")!)
+        let tmp = parseUrl(url: URL(string: "https://api.3geonames.org/?randomland=yes")!)
         rightAnswer = tmp.0
         ansLoc = tmp.1
         
@@ -63,16 +68,21 @@ class Question
         rightAnswer.latitude = rd.nearest.latt
         url = makeURL(rightAnswer.latitude, rightAnswer.longitude)
     }
-    func dist() -> Double {
+    func calcDist() -> Double {
         if userAnswer == nil {
             return -1
         }
-        var rightAnsPrime = degToKm(rightAnswer)
-        var userAnsPrime = degToKm(userAnswer!)
+        let rightAnsPrime = degToKm(rightAnswer)
+        let userAnsPrime = degToKm(userAnswer!)
         return abs(sqrt(square(rightAnsPrime.latitude - userAnsPrime.latitude) + square(rightAnsPrime.longitude - userAnsPrime.longitude)))
     }
     private func square(_ x: Double) -> Double {
         return x * x
+    }
+    func setUserAnswer(c: Coordinate) {
+        userAnswer = c
+        dist = calcDist()
+        score = calcScore(dist)
     }
 }
 
@@ -95,7 +105,7 @@ struct RandomData: Codable {
 
 func parseUrl(url: URL) -> (Coordinate, String) {
     var ret: Coordinate = Coordinate(longitude: -1, latitude: -1)
-    var str = urlToStr(url: url)
+    let str = urlToStr(url: url)
     var retStr = ""
     if str != "" {
         var latt = str.components(separatedBy: "<latt>")
@@ -125,7 +135,6 @@ func urlToStr(url: URL) -> String {
     var str: String = ""
     do {
         let contents = try String(contentsOf: url)
-        //print("\n\(contents)\n")
         str = contents
     } catch {
         print("Invalid URL")
@@ -134,10 +143,14 @@ func urlToStr(url: URL) -> String {
 }
 
 func degToKm(_ a : Coordinate) -> Coordinate {
-    var lat = a.latitude * 110.574
-    var long = a.longitude * (111.320 * cos(lat))
-    var ret = Coordinate(
+    let lat = a.latitude * 110.574
+    let long = a.longitude * (111.320 * cos(lat))
+    let ret = Coordinate(
         longitude: long,
         latitude: lat)
     return ret
+}
+
+func calcScore(_ x: Double) -> Double {
+    return 5000 * exp(-x/2000)
 }

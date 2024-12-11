@@ -87,7 +87,10 @@ class Question
 }
 
 func makeURL(_ lat : Double, _ long : Double) -> URL? {
-    return URL(string: "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=600x400&key=AIzaSyB9FYnKmGT9K2SABpZ9XQXPZv8ZWhRY_8U&radius=\(radius)&fov=180")
+    if API_KEY == nil {
+        fatalError("Need to create a file with your API key as a variable 'API_KEY'")
+    }
+    return URL(string: "https://maps.googleapis.com/maps/api/streetview?location=\(lat),\(long)&size=600x400&key=\(API_KEY)&radius=\(radius)&fov=180")
 }
 
 struct Metadata: Codable {

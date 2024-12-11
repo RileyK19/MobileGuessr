@@ -1,6 +1,11 @@
 # MobileGuessr
 Change++ Challenge Solution
 
+## Instructions
+- Create a file 'API_KEY.swift'
+- Add a string variable called 'API_KEY' with your Google API key
+- Use the app freely!
+
 ## Showcase
 <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Main_Menu.png" alt="Image 1" width="200"/> <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Guess_Screen.png" alt="Image 2" width="200"/> 
 <img src="https://github.com/ChangePlusPlusVandy/change-coding-challenge-2024-RileyK19/blob/main/Change%2B%2BChallenge/Change%2B%2BChallenge/Examples/Light_Map.png" alt="Image 3" width="200"/>
